@@ -1,6 +1,14 @@
 import React, {Component} from "react";
 
 class Employment extends Component {
+  // state: {
+  //  company: '',
+  //  position: '',
+  //  position: '',
+  //  duties: '',
+  //  startDate: '',
+  //  endDate: ''
+  // }
     render(){
         return(
             <div>
@@ -21,3 +29,4 @@ class Employment extends Component {
         );
     };
 };
+

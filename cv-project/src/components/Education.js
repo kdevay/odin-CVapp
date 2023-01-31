@@ -1,15 +1,32 @@
 import React, {Component} from "react";
 
 class Education extends Component {
-    render(){
+  // state: 
+    constructor(props) {
+        super(props);
+        this.state = {
+            school:'',
+            major:'',
+            degreeType:'',
+            minor:'',
+            gradDate:''
+    };
+
+    trackChanges = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    };
+    
+    render() {
         return(
-            <div>
-                <label for='institution'>Institution</label>
-                <input type='text' name='institution' placeholder='School name here'></input>
+            <form>
+                <label for='school'>School</label>
+                <input type='text' name='school' onChange={this.trackChanges} ></input>
                 <label for='major'>Major</label>
-                <input type='text' name='major'></input>
-                <label>Degree Type</label>
-                <select name='status'>
+                <input type='text' name='major' onChange={this.trackChanges} ></input>
+                <label for='degreeType'>Degree Type</label>
+                <select name='degreeType'>
                     <option value="A">Associate</option>
                     <option value="B">Bachelor</option>
                     <option value="M">Master</option>
@@ -18,12 +35,14 @@ class Education extends Component {
                     <option value="JD">JD</option>
                 </select>
                 <label for='minor'>Minor</label>
-                <input type='text' name='minor'></input>
+                <input type='text' name='minor' onChange={this.trackChanges} ></input>
                 <label for='graduation'>Graduation date</label>
-                <input name='graduation' type='date'></input>
+                <input name='graduation' type='date' onChange={this.trackChanges} ></input>
                 <button>Submit</button>
                 <button>Add New</button>
-            </div>
+            </form>
         );
     };
 };
+
+export default Education; 

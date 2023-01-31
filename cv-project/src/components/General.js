@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class Employment extends Component {
+class General extends Component {
     render(){
         return(
             <div>
@@ -13,7 +13,6 @@ class Employment extends Component {
                 <label for='phone'>Phone Number</label>
                 <input type='text' name='phone'></input>
                 <button>Submit</button>
-                <button>Add New</button>
             </div>
         );
     };
