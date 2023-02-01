@@ -9,24 +9,32 @@ class Education extends Component {
             major:'',
             degreeType:'',
             minor:'',
-            gradDate:''
+            gradDate:'',
+            id: this.props.data
     };
+
+    updateId = () => {
+        this.props.track(this.props.id, this.state);
+    }
 
     trackChanges = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
+        this.props.track(this.props.id, this.state);
     };
-    
+
     render() {
+        {this.updateID()};
         return(
-            <form>
+            
+            <form key={this.state.id}>
                 <label for='school'>School</label>
                 <input type='text' name='school' onChange={this.trackChanges} ></input>
                 <label for='major'>Major</label>
                 <input type='text' name='major' onChange={this.trackChanges} ></input>
                 <label for='degreeType'>Degree Type</label>
-                <select name='degreeType'>
+                <select name='degreeType' onChange={this.trackChanges}>
                     <option value="A">Associate</option>
                     <option value="B">Bachelor</option>
                     <option value="M">Master</option>
@@ -38,8 +46,6 @@ class Education extends Component {
                 <input type='text' name='minor' onChange={this.trackChanges} ></input>
                 <label for='graduation'>Graduation date</label>
                 <input name='graduation' type='date' onChange={this.trackChanges} ></input>
-                <button>Submit</button>
-                <button>Add New</button>
             </form>
         );
     };

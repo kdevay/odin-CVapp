@@ -1,0 +1,38 @@
+/* containers */
+#main {
+  display: flex;
+  margin: 0 100px;
+  gap: 10px
+}
+
+.formBox{
+  border: 1px solid salmon;
+}
+
+.item{
+  margin: 5px;
+  padding: 5px;
+}
+
+/* text */
+.plain{
+  font-size: 16px;
+}
+.title{
+  font-size: 20px;
+}
+.bigBox{
+  height: 200px;
+}
+
+/* elements */
+button {
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+  background-color: salmon;
+}
+button:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px 1px rgb(171, 100, 92);
+}
