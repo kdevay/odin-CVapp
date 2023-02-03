@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import jsPDF from 'jspdf'
+import uniqid from "uniqid";
 import General from "./components/General";
 import Education from "./components/Education";
 import Employment from "./components/Employment";
@@ -16,22 +18,28 @@ class App extends Component {
         email: '',
         phone: ''
       },
-      job: {
-        company: '',
-        position: '',
-        duties: '',
-        startDate: '',
-        endDate: ''
-      },
-      school: {
-        school:'',
-        major:'',
-        degreeType:'',
-        gradDate:''
-      },
-      schools: [{school:'', major:'', degreeType:'', gradDate:''}],
-      jobs: [{company: '', position: '', duties: '', startDate: '', endDate: ''}]
+      schools: [{school:'', major:'', degreeType:'', gradDate:'', key: uniqid()}],
+      jobs: [{company: '', position: '', duties: '', startDate: '', endDate: '', key: uniqid()}]
     };
+  };
+  handleGeneratePdf = () => {
+    const doc = new jsPDF();
+    doc.html(html_element, {
+      async callback(doc) {
+        // save the document as a PDF with name of pdf_name
+        doc.save("pdf_name");
+      }
+    });
+  };
+
+  formatDate = (string) => {
+    let months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
+    // [year, month, day]
+    let arr = string.split('-')
+    let month = months[arr[1]];
+    console.log(month);
+    // index = index[0] === '0' ? parseInt(index[1]) : parseInt(index[1]);
+    return month + ' ' + arr[0]
   };
 
   handleDisplay = (e) => {
@@ -52,50 +60,66 @@ class App extends Component {
 
   addField = (e) => {
     if (e.target.id === 's'){
-      console.log('school');
+      let school = {
+        school:'',
+        major:'',
+        degreeType:'',
+        gradDate:'',
+        key: uniqid()
+      };
       this.setState({
-        schools: this.state.schools.concat(this.state.school)
+        schools: this.state.schools.concat(school)
       });
       return;
     }
+    let job = {
+      company: '',
+      position: '',
+      duties: '',
+      startDate: '',
+      endDate: '',
+      key: uniqid()
+    };
     this.setState({
-      jobs: this.state.jobs.concat(this.state.job)
+      jobs: this.state.jobs.concat(job)
     });
   };
 
-  trackGeneral = (e) => {
+  trackChanges = (e) => {
+    console.log('trackChanges hit')
     let {name, value} = e.target;
-    let obj = this.state.person;
-    obj[name] = value;
-    
-    this.setState({
-      person: obj
-    });
-  };
-
-  trackJob = (e) => {
-    let {name, value} = e.target;
+    if (e.target.getAttribute('data-id') === 'g') {
+      let obj = this.state.person;
+      obj[name] = value;
+      this.setState({
+        person: obj
+      });
+      return;
+    }
     let index = e.target.getAttribute('data');
-    let arr = this.state.jobs.slice();
+    let arrName = e.target.getAttribute('data-id') === 's' ? 'schools' : 'jobs';
+    let arr = this.state[arrName].slice();
     let obj = arr[index];
     obj[name] = value;
     arr[index] = obj;
     this.setState({
-      jobs: arr
+      [arrName]: arr
     });
   };
 
-  trackSchool = (e) => {
-    let {name, value} = e.target;
+  deleteItem = (e) => {
     let index = e.target.getAttribute('data');
-    let arr = this.state.schools.slice();
-    let obj = arr[index];
-    obj[name] = value;
-    arr[index] = obj;
+    let arrName = e.target.getAttribute('data-id') === 's' ? 'schools' : 'jobs';
+    let arr = this.state[arrName].slice();
+    console.log('arr: ', arr.forEach(a => console.log(a)))
+    arr.splice(index, 1);
+    console.log('after: ', arr)
+    console.log('arrName: ', arrName)
     this.setState({
-      schools: arr
-    });
-  }
+      [arrName]: arr
+    }, () => console.log('the new state: ', this.state));
+    // console.log('statests: ', this.state)
+  };
 
 
   render() {
@@ -107,7 +131,7 @@ class App extends Component {
 
         <div className='topHeading'><h2>General</h2></div>
         <div className='formBox'>
-          <General isEdit={this.state.isEdit} data={this.state.person} track={this.trackGeneral}></General>
+          <General isEdit={this.state.isEdit} data={this.state.person} track={this.trackChanges}></General>
         </div>
 
         <div className='heading'>
@@ -117,13 +141,18 @@ class App extends Component {
         <div className='formBox'>
           {
             this.state.schools.map((school, index) => {
-              if (index < this.state.schools.length){
+              console.log('Map schools: ', this.state.schools)
+              console.log('map index: ', index)
+              console.log('school.school: ', school.school)
+              if (this.state.schools.length > 1){
                 return (
-                  <Education hasLine='true' isEdit={this.state.isEdit} data={school} index={index} key={index} track={this.trackSchool}></Education>
+                  <Education hasDelete='true' delete={this.deleteItem} isEdit={this.state.isEdit} data={school} index={index} key={school.key}
+                  track={this.trackChanges}></Education>
                 );
               }
               return (
-                <Education hasLine='false' isEdit={this.state.isEdit} data={school} index={index} key={index} track={this.trackSchool}></Education>
+                <Education hasDelete='false' isEdit={this.state.isEdit} data={school} index={index} key={school.key}
+                track={this.trackChanges}></Education>
               );
             })
           }
@@ -136,7 +165,16 @@ class App extends Component {
         <div className='formBox'>
           {
             this.state.jobs.map((job, index) => {
-              return <Employment onChange={this.trackJob2} isEdit={this.state.isEdit} data={job} key={index} index={index} track={this.trackJob}></Employment>;
+              if (this.state.jobs.length > 1){
+                return (
+                  <Employment hasDelete='true' delete={this.deleteItem} isEdit={this.state.isEdit} data={job} index={index} key={job.key} 
+                  track={this.trackChanges}></Employment>
+                  );
+              }
+              return (
+                <Employment hasDelete='false' isEdit={this.state.isEdit} data={job} index={index} key={job.key} 
+                track={this.trackChanges}></Employment>
+                );
             })
           }
         </div>
@@ -149,49 +187,52 @@ class App extends Component {
     return(
       <div id='main'>
         <h1>CV Generator</h1>
-        <div className='formBox' key={this.state.id}>
-          <p className='biggest'>{this.state.person.firstName + ' ' + this.state.person.lastName}</p>
-          <p className='plain'>{this.state.person.email}</p>
-          <p className='plain'>{this.state.person.phone}</p>
+        <div className='topBox' key={this.state.id}>
+          <h2>{this.state.person.firstName + ' ' + this.state.person.lastName}</h2>
+          <div className='sameLine'>
+            <p className='plain'>{this.state.person.email}</p>
+            <p className='plain'>{this.state.person.phone}</p>
+          </div>
         </div>
-        <div className="formBox">
-          <h2>Education</h2>
-          {this.state.schools.map((school, index)  => {
-            console.log('degree: ', school.degreeType)
-            console.log('grad d8: : ', school.gradDate)
-            return (
-              <div className='item' key={index}>
-                <p className='title'>{school.school}</p>
-                <p className='plain'>{school.major + ' ' + school.degreeType}</p>
-                <p className='plain'>{'Graduated '+ school.gradDate}</p>
-              </div>
-            );
-          })}
-        </div>
-        <div className="formBox">
-          <h2>Employment</h2>
-          {this.state.jobs.map((job, index) => {
-            if (job.duties === '') {
-              return ( 
-                <div className='item' key={index}>
-                  <p className='title'>{job.company}</p>
-                  <p className='plain'>{'Position: ' + job.position}</p>
-                  <p className='plain'>{job.endDate + ' - ' + job.startDate}</p>
-                </div>
-              );
-            } else {
+        <div className='mainGrid'>
+          <div className="SchoolBox">
+            <h2>Education</h2>
+            {this.state.schools.map((school, index)  => {
               return (
-                <div className='item' key={index}>
-                  <p className='title'>{job.company}</p>
-                  <p className='plain'>{'Position: ' + job.position}</p>
-                  <p className='plain'>{'Duties: ' + job.duties}</p>
-                  <p className='plain'>{job.endDate + ' - ' + job.startDate}</p>
+                <div className='item' key={school.key}>
+                  <p className='title'>{school.school}</p>
+                  <p className='plain'>{school.major + ' ' + school.degreeType}</p>
+                  <p className='plain'>{'Graduated '+ this.formatDate(school.gradDate)}</p>
                 </div>
               );
-            }
-          })}
+            })}
+          </div>
+          <div className="jobBox">
+            <h2>Employment</h2>
+            {this.state.jobs.map((job, index) => {
+              if (job.duties === '') {
+                return ( 
+                  <div className='item' key={job.key}>
+                    <p className='title'>{job.company}</p>
+                    <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                    <p className='plain'>{'Position: ' + job.position}</p>
+                  </div>
+                );
+              } else {
+                return (
+                  <div className='item' key={job.key}>
+                    <p className='title'>{job.company}</p>
+                    <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                    <p className='plain'>{'Position: ' + job.position}</p>
+                    <p className='plain'>{'Duties: ' + job.duties}</p>
+                  </div>
+                );
+              }
+            })}
+          </div>
         </div>
         <button id='edit' onClick={this.handleDisplay}>Edit</button>
+        <button id='pdf' onClick={this.handleGeneratePdf}>Generate PDF</button>
       </div>
     );
   };

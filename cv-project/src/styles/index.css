@@ -22,6 +22,7 @@ hr {
 }
 h2{
   margin: 0px;
+  padding: 0px;
 }
 .add {
   border: none;
@@ -32,6 +33,9 @@ h2{
   margin-bottom: 4px;
   background-color: white;
 }
+#done {
+  margin: 20px 0px;
+}
 
 /* containers */
 #main {
@@ -40,7 +44,11 @@ h2{
   align-items: center;
   margin: 0 200px;
 }
-
+.formDiv {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+}
 .formBox {
   display: flex;
   flex-direction: column;
@@ -58,6 +66,11 @@ h2{
 /* text */
 .plain{
   font-size: 16px;
+  margin: 0px;
+}
+.date{
+  font-size: 14px;
+  font-style: italic;
 }
 .title{
   font-size: 20px;
@@ -99,4 +112,30 @@ h2{
 }
 #bigInput {
   grid-area: 3 / 1 / 4 / 3;
+}
+
+/* cv display styles */
+.topBox {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 35px 20px;
+  height: 77px;
+  justify-items: center;
+  align-items: start;
+  margin-top: 15px;
+}
+.sameLine {
+  display: flex;
+  gap: 40px;
+}
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr;
+}
+.jobBox{
+  display: block
+}
+.schoolBox{
+  display: block
 }
