@@ -1,51 +1,100 @@
 import React, {Component} from "react";
 
 class Education extends Component {
-  // state: 
     constructor(props) {
         super(props);
+        this.degreeTypes = [
+            'Select',
+            'Associate',
+            'Bachelor',
+            'Master',
+            'PHD',
+            'MD',
+            'JD',
+        ];
         this.state = {
             school:'',
             major:'',
             degreeType:'',
-            minor:'',
             gradDate:'',
-            id: this.props.data
+        }
+    };
+    updateParent = () => {
+        this.props.track(this.state, this.props.index);
     };
 
-    updateId = () => {
-        this.props.track(this.props.id, this.state);
-    }
-
     trackChanges = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
         this.setState({
-            [e.target.name]: e.target.value
+            [name]: value
         });
-        this.props.track(this.props.id, this.state);
+        this.props.track(this.state, this.props.index);
     };
 
     render() {
-        {this.updateID()};
+        if (!this.props.isEdit){
+            return(
+                <form className='smallForm'>
+                    <hr className='small1'></hr>
+                    <div>
+                        <label htmlFor='school'>School</label><br></br>
+                        <input type='text' name='school' onChange={this.trackChanges}></input>
+                    </div>
+                    <div>
+                        <label htmlFor='major'>Major</label><br></br>
+                        <input type='text' name='major' onChange={this.trackChanges}></input>
+                    </div>
+                    <div>
+                        <label htmlFor='gradDate'>Graduated</label><br></br>
+                        <input name='gradDate' type='date' onChange={this.trackChanges}></input>
+                    </div>
+                    <div>
+                        <label htmlFor='degreeType'>Degree Type</label><br></br>
+                        <select name='degreeType' onChange={this.trackChanges}>
+                            {
+                                this.degreeTypes.map((item, index) => {
+                                        if (item === this.props.data.degreeType) {
+                                            return <option selected key={index} value={item}>{item}</option>;
+                                        }
+                                        return <option key={index} value={item}>{item}</option>;
+                                })
+                            }
+                        </select>
+                    </div>
+                    <br></br>
+                </form>
+            );
+        }
         return(
-            
-            <form key={this.state.id}>
-                <label for='school'>School</label>
-                <input type='text' name='school' onChange={this.trackChanges} ></input>
-                <label for='major'>Major</label>
-                <input type='text' name='major' onChange={this.trackChanges} ></input>
-                <label for='degreeType'>Degree Type</label>
-                <select name='degreeType' onChange={this.trackChanges}>
-                    <option value="A">Associate</option>
-                    <option value="B">Bachelor</option>
-                    <option value="M">Master</option>
-                    <option value="PHD">PHD</option>
-                    <option value="MD">MD</option>
-                    <option value="JD">JD</option>
-                </select>
-                <label for='minor'>Minor</label>
-                <input type='text' name='minor' onChange={this.trackChanges} ></input>
-                <label for='graduation'>Graduation date</label>
-                <input name='graduation' type='date' onChange={this.trackChanges} ></input>
+            <form className='smallForm'>
+                <hr className='small1'></hr>
+                <div>
+                    <label htmlFor='school'>School</label><br></br>
+                    <input type='text' name='school' value={this.props.data.school} onChange={this.trackChanges}></input>
+                </div>
+                <div>
+                    <label htmlFor='major'>Major</label><br></br>
+                    <input type='text' name='major' value={this.props.data.major} onChange={this.trackChanges}></input>
+                </div>
+                <div>
+                    <label htmlFor='graduation'>Graduated</label><br></br>
+                    <input name='graduation' type='date' value={this.props.data.date} onChange={this.trackChanges}></input>
+                </div>
+                <div>
+                    <label htmlFor='degreeType'>Degree Type</label><br></br>
+                    <select name='degreeType' onChange={this.trackChanges}>
+                        {
+                            this.degreeTypes.map((item, index) => {
+                                if (item === this.props.data.degreeType) {
+                                    return <option selected key={index} value={item}>{item}</option>;
+                                }
+                                return <option key={index} value={item}>{item}</option>;
+                            })
+                        }
+                    </select>
+                </div>
+                <br></br>
             </form>
         );
     };
