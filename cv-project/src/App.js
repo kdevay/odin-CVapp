@@ -23,8 +23,9 @@ class App extends Component {
     };
   };
   handleGeneratePdf = () => {
-    const doc = new jsPDF();
-    doc.html(html_element, {
+    const CV = document.getElementById('cv');
+    const doc = new jsPDF('portrait', 'pt', 'a4');
+    doc.html(CV, {
       async callback(doc) {
         // save the document as a PDF with name of pdf_name
         doc.save("pdf_name");
@@ -185,50 +186,51 @@ class App extends Component {
     }
     // If done filling out form
     return(
-      <div id='main'>
-        <h1>CV Generator</h1>
-        <div className='topBox' key={this.state.id}>
-          <h2>{this.state.person.firstName + ' ' + this.state.person.lastName}</h2>
-          <div className='sameLine'>
-            <p className='plain'>{this.state.person.email}</p>
-            <p className='plain'>{this.state.person.phone}</p>
+      <div id='displayMain'>
+        <div id='cv'>
+          <div className='topBox' key={this.state.id}>
+            <h2>{this.state.person.firstName + ' ' + this.state.person.lastName}</h2>
+            <div className='sameLine'>
+              <p className='plain'>{this.state.person.email}</p>
+              <p className='plain'>{this.state.person.phone}</p>
+            </div>
           </div>
-        </div>
-        <div className='mainGrid'>
-          <div className="SchoolBox">
-            <h2>Education</h2>
-            {this.state.schools.map((school, index)  => {
-              return (
-                <div className='item' key={school.key}>
-                  <p className='title'>{school.school}</p>
-                  <p className='plain'>{school.major + ' ' + school.degreeType}</p>
-                  <p className='plain'>{'Graduated '+ this.formatDate(school.gradDate)}</p>
-                </div>
-              );
-            })}
-          </div>
-          <div className="jobBox">
-            <h2>Employment</h2>
-            {this.state.jobs.map((job, index) => {
-              if (job.duties === '') {
-                return ( 
-                  <div className='item' key={job.key}>
-                    <p className='title'>{job.company}</p>
-                    <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
-                    <p className='plain'>{'Position: ' + job.position}</p>
-                  </div>
-                );
-              } else {
+          <div className='mainGrid'>
+            <div className="SchoolBox">
+              <h2>Education</h2>
+              {this.state.schools.map((school, index)  => {
                 return (
-                  <div className='item' key={job.key}>
-                    <p className='title'>{job.company}</p>
-                    <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
-                    <p className='plain'>{'Position: ' + job.position}</p>
-                    <p className='plain'>{'Duties: ' + job.duties}</p>
+                  <div className='item' key={school.key}>
+                    <p className='title'>{school.school}</p>
+                    <p className='plain'>{school.major + ' ' + school.degreeType}</p>
+                    <p className='plain'>{'Graduated '+ this.formatDate(school.gradDate)}</p>
                   </div>
                 );
-              }
-            })}
+              })}
+            </div>
+            <div className="jobBox">
+              <h2>Employment</h2>
+              {this.state.jobs.map((job, index) => {
+                if (job.duties === '') {
+                  return ( 
+                    <div className='item' key={job.key}>
+                      <p className='title'>{job.company}</p>
+                      <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      <p className='plain'>{'Position: ' + job.position}</p>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className='item' key={job.key}>
+                      <p className='title'>{job.company}</p>
+                      <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      <p className='plain'>{'Position: ' + job.position}</p>
+                      <p className='plain'>{'Duties: ' + job.duties}</p>
+                    </div>
+                  );
+                }
+              })}
+            </div>
           </div>
         </div>
         <button id='edit' onClick={this.handleDisplay}>Edit</button>
