@@ -74,7 +74,8 @@ class App extends Component {
   };
 
   trackJob = (e) => {
-    let {index, name, value} = e.target;
+    let {name, value} = e.target;
+    let index = e.target.getAttribute('data');
     let arr = this.state.jobs.slice();
     let obj = arr[index];
     obj[name] = value;
@@ -85,7 +86,8 @@ class App extends Component {
   };
 
   trackSchool = (e) => {
-    let {index, name, value} = e.target;
+    let {name, value} = e.target;
+    let index = e.target.getAttribute('data');
     let arr = this.state.schools.slice();
     let obj = arr[index];
     obj[name] = value;
@@ -121,7 +123,7 @@ class App extends Component {
                 );
               }
               return (
-                <Education hasLine='false' isEdit={this.state.isEdit} data={school} index={index} key={index} id={index} track={this.trackSchool}></Education>
+                <Education hasLine='false' isEdit={this.state.isEdit} data={school} index={index} key={index} track={this.trackSchool}></Education>
               );
             })
           }

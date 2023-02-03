@@ -21,19 +21,19 @@ class Education extends Component {
                     <hr className='small1'></hr>
                     <div>
                         <label htmlFor='school'>School</label><br></br>
-                        <input type='text' name='school' onChange={this.props.track}></input>
+                        <input data={this.props.index} type='text' name='school' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='major'>Major</label><br></br>
-                        <input type='text' name='major' onChange={this.props.track}></input>
+                        <input data={this.props.index} type='text' name='major' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='gradDate'>Graduated</label><br></br>
-                        <input name='gradDate' type='date' onChange={this.props.track}></input>
+                        <input data={this.props.index} name='gradDate' type='date' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='degreeType'>Degree Type</label><br></br>
-                        <select name='degreeType' onChange={this.props.track}>
+                        <select data={this.props.index} name='degreeType' onChange={this.props.track}>
                             {
                                 this.degreeTypes.map((item, index) => {
                                         if (item === this.props.data.degreeType) {
@@ -53,19 +53,19 @@ class Education extends Component {
                 <hr className='small1'></hr>
                 <div>
                     <label htmlFor='school'>School</label><br></br>
-                    <input type='text' name='school' value={this.props.data.school} onChange={this.props.track}></input>
+                    <input data={this.props.index} type='text' name='school' value={this.props.data.school} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='major'>Major</label><br></br>
-                    <input type='text' name='major' value={this.props.data.major} onChange={this.props.track}></input>
+                    <input data={this.props.index} type='text' name='major' value={this.props.data.major} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='graduation'>Graduated</label><br></br>
-                    <input name='graduation' type='date' value={this.props.data.date} onChange={this.props.track}></input>
+                    <input data={this.props.index} name='graduation' type='date' value={this.props.data.date} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='degreeType'>Degree Type</label><br></br>
-                    <select name='degreeType' onChange={this.props.track}>
+                    <select data={this.props.index} name='degreeType' onChange={this.props.track}>
                         {
                             this.degreeTypes.map((item, index) => {
                                 if (item === this.props.data.degreeType) {
