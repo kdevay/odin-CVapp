@@ -12,24 +12,6 @@ class Education extends Component {
             'MD',
             'JD',
         ];
-        this.state = {
-            school:'',
-            major:'',
-            degreeType:'',
-            gradDate:'',
-        }
-    };
-    updateParent = () => {
-        this.props.track(this.state, this.props.index);
-    };
-
-    trackChanges = (e) => {
-        let name = e.target.name;
-        let value = e.target.value;
-        this.setState({
-            [name]: value
-        });
-        this.props.track(this.state, this.props.index);
     };
 
     render() {
@@ -39,19 +21,19 @@ class Education extends Component {
                     <hr className='small1'></hr>
                     <div>
                         <label htmlFor='school'>School</label><br></br>
-                        <input type='text' name='school' onChange={this.trackChanges}></input>
+                        <input type='text' name='school' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='major'>Major</label><br></br>
-                        <input type='text' name='major' onChange={this.trackChanges}></input>
+                        <input type='text' name='major' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='gradDate'>Graduated</label><br></br>
-                        <input name='gradDate' type='date' onChange={this.trackChanges}></input>
+                        <input name='gradDate' type='date' onChange={this.props.track}></input>
                     </div>
                     <div>
                         <label htmlFor='degreeType'>Degree Type</label><br></br>
-                        <select name='degreeType' onChange={this.trackChanges}>
+                        <select name='degreeType' onChange={this.props.track}>
                             {
                                 this.degreeTypes.map((item, index) => {
                                         if (item === this.props.data.degreeType) {
@@ -71,19 +53,19 @@ class Education extends Component {
                 <hr className='small1'></hr>
                 <div>
                     <label htmlFor='school'>School</label><br></br>
-                    <input type='text' name='school' value={this.props.data.school} onChange={this.trackChanges}></input>
+                    <input type='text' name='school' value={this.props.data.school} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='major'>Major</label><br></br>
-                    <input type='text' name='major' value={this.props.data.major} onChange={this.trackChanges}></input>
+                    <input type='text' name='major' value={this.props.data.major} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='graduation'>Graduated</label><br></br>
-                    <input name='graduation' type='date' value={this.props.data.date} onChange={this.trackChanges}></input>
+                    <input name='graduation' type='date' value={this.props.data.date} onChange={this.props.track}></input>
                 </div>
                 <div>
                     <label htmlFor='degreeType'>Degree Type</label><br></br>
-                    <select name='degreeType' onChange={this.trackChanges}>
+                    <select name='degreeType' onChange={this.props.track}>
                         {
                             this.degreeTypes.map((item, index) => {
                                 if (item === this.props.data.degreeType) {

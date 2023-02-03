@@ -63,33 +63,32 @@ class App extends Component {
     });
   };
 
-  trackGeneral = (obj) => {
+  trackGeneral = (e) => {
+    let {name, value} = e.target;
+    let obj = this.state.person;
+    obj[name] = value;
+    
     this.setState({
       person: obj
     });
   };
 
-  trackJob = (obj, index) => {
+  trackJob = (e) => {
+    let {index, name, value} = e.target;
     let arr = this.state.jobs.slice();
-    arr[index] = obj;
-    this.setState({
-      jobs: arr
-    });
-  };
-  trackJob2 = (e) => {
-    let arr = this.state.jobs.slice();
-    let index = e.target.index;
-    console.log('state: ', e.target.state);
-    let obj = e.target.state
+    let obj = arr[index];
+    obj[name] = value;
     arr[index] = obj;
     this.setState({
       jobs: arr
     });
   };
 
-  trackSchool = (obj, index) => {
-    // School form
+  trackSchool = (e) => {
+    let {index, name, value} = e.target;
     let arr = this.state.schools.slice();
+    let obj = arr[index];
+    obj[name] = value;
     arr[index] = obj;
     this.setState({
       schools: arr
