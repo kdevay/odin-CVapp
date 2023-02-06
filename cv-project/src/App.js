@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import jsPDF from 'jspdf'
 import uniqid from "uniqid";
 import General from "./components/General";
 import Education from "./components/Education";
 import Employment from "./components/Employment";
+import { html2pdf } from "html2pdf.js";
 
 
 class App extends Component {
@@ -24,13 +24,7 @@ class App extends Component {
   };
   handleGeneratePdf = () => {
     const CV = document.getElementById('cv');
-    const doc = new jsPDF('portrait', 'pt', 'a4');
-    doc.html(CV, {
-      async callback(doc) {
-        // save the document as a PDF with name of pdf_name
-        doc.save("pdf_name");
-      }
-    });
+    html2pdf().from(CV).save();
   };
 
   formatDate = (string) => {
