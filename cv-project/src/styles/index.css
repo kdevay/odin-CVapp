@@ -8,9 +8,15 @@ button {
 }
 button:hover {
   cursor: pointer;
+  font-weight: 600;
+  padding: 11px;
   border: none;
   background-color: salmon;
   box-shadow: 2px 3px 3px 1px rgb(171, 100, 92);
+}
+.deleteButton{
+  margin: 0px 0px 20px 0px;
+  float: right;
 }
 select {
   width: 126px;
@@ -33,6 +39,14 @@ h2{
   margin-bottom: 4px;
   background-color: white;
 }
+.add:hover{
+  cursor: pointer;
+  padding: 2px;
+  font-weight: 100;
+  border: none;
+  background-color: salmon;
+  box-shadow: 2px 3px 3px 1px rgb(171, 100, 92);
+}
 #done {
   margin: 20px 0px;
 }
@@ -42,7 +56,7 @@ h2{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 200px;
+  margin: 0 20vw;
 }
 .formDiv {
   width: 100%;
@@ -55,11 +69,9 @@ h2{
   align-items: center;
   width: 100%;
 }
-
 .item{
   width: 100%;
-  margin: 5px;
-  padding: 5px;
+  margin: 25px 0px;
 }
 
 
@@ -71,12 +83,14 @@ h2{
 .date{
   font-size: 14px;
   font-style: italic;
+  margin: 0px;
+  letter-spacing: 1px;
 }
 .title{
   font-size: 20px;
 }
 .bigBox{
-  width: 460px;
+  width: 58vw;
   height: 100px;
 }
 .topHeading{
@@ -110,7 +124,11 @@ h2{
 .jobLine {
   grid-area: 1 / 1 / 2 / 3
 }
-#bigInput {
+.topLine {
+  margin: 2px;
+  padding: 0px;
+}
+.bigInput {
   grid-area: 3 / 1 / 4 / 3;
 }
 
@@ -119,7 +137,11 @@ h2{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 50px;
+  margin: 0 40px;
+}
+.displayTitle{
+  font-size: 20px;
+  margin: 0px 0px 4px 0px;
 }
 #cv{
   padding: 50px;
@@ -137,14 +159,24 @@ h2{
   display: flex;
   gap: 40px;
 }
+.dateLine {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: center;
+}
 .mainGrid {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 4fr;
   grid-template-rows: 1fr;
+  gap: 50px;
 }
 .jobBox{
   display: block
 }
 .schoolBox{
   display: block
+}
+#edit{
+  margin-top: 30px;
 }

@@ -21,7 +21,7 @@ class Employment extends Component {
                                 <label htmlFor='position' className='plain'>Position</label><br></br>
                                 <input data-id='j' data={this.props.index} type='text' name='position' onChange={this.props.track}></input>
                             </div>
-                            <div id='bigInput'>
+                            <div className='bigInput'>
                                 <label htmlFor='duties' className='plain'>Duties</label><br></br>
                                 <input data-id='j' data={this.props.index} type='text' name='duties' className='bigBox' maxLength='400' onClick={this.props.track} onChange={this.props.track}></input>
                             </div>
@@ -33,9 +33,8 @@ class Employment extends Component {
                                 <label htmlFor='endDate' className='plain'>End Date</label><br></br>
                                 <input data-id='j' data={this.props.index} name='endDate' type='date' onChange={this.props.track}></input>
                             </div>
-                            <br></br>
                         </form>
-                        <button data-id='j' data={this.props.index} onClick={this.props.delete}>Delete</button>
+                        <button className='deleteButton' data-id='j' data={this.props.index} onClick={this.props.delete}>Delete</button>
                     </div>
                 );
             } // If there's only one job form
@@ -51,7 +50,7 @@ class Employment extends Component {
                             <label htmlFor='position' className='plain'>Position</label><br></br>
                             <input data-id='j' data={this.props.index} type='text' name='position' onChange={this.props.track}></input>
                         </div>
-                        <div id='bigInput'>
+                        <div className='bigInput'>
                             <label htmlFor='duties' className='plain'>Duties</label><br></br>
                             <input data-id='j' data={this.props.index} type='text' name='duties' className='bigBox' maxLength='400' onClick={this.props.track} onChange={this.props.track}></input>
                         </div>
@@ -81,8 +80,8 @@ class Employment extends Component {
                             <label htmlFor='position' className='plain'>Position</label><br></br>
                             <input data-id='j' data={this.props.index} type='text' name='position' value={this.props.data.position} onChange={this.props.track}></input>
                         </div>
-                        <div>
-                            <label htmlFor='duties' className='plain'>Duties</label>
+                        <div className='bigInput'>
+                            <label htmlFor='duties' className='plain'>Duties</label><br></br>
                             <input data-id='j' data={this.props.index} type='text' name='duties' className='bigBox' value={this.props.data.duties} onChange={this.props.track} maxLength='400'></input>
                         </div>
                         <div>
@@ -93,9 +92,8 @@ class Employment extends Component {
                             <label htmlFor='endDate' className='plain'>End Date</label><br></br>
                             <input data-id='j' data={this.props.index} name='endDate' type='date' value={this.props.data.date} onChange={this.props.track}></input>
                         </div>
-                        <br></br>
                     </form>
-                    <button data-id='j' data={this.props.index} onClick={this.props.delete}>Delete</button>
+                    <button className='deleteButton' data-id='j' data={this.props.index} onClick={this.props.delete}>Delete</button>
                 </div>
             );
         }// If there's only one job edit form
@@ -111,8 +109,8 @@ class Employment extends Component {
                         <label htmlFor='position' className='plain'>Position</label><br></br>
                         <input data-id='j' data={this.props.index} type='text' name='position' value={this.props.data.position} onChange={this.props.track}></input>
                     </div>
-                    <div>
-                        <label htmlFor='duties' className='plain'>Duties</label>
+                    <div className='bigInput'>
+                        <label htmlFor='duties' className='plain'>Duties</label><br></br>
                         <input data-id='j' data={this.props.index} type='text' name='duties' className='bigBox' value={this.props.data.duties} onChange={this.props.track} maxLength='400'></input>
                     </div>
                     <div>

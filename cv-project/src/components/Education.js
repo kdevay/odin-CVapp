@@ -46,9 +46,8 @@ class Education extends Component {
                                     }
                                 </select>
                             </div>
-                            <br></br>
                         </form>
-                        <button data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
+                        <button className='deleteButton' data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
                     </div>
                 );
             }// If filling out one school form
@@ -116,9 +115,8 @@ class Education extends Component {
                                 }
                             </select>
                         </div>
-                        <br></br>
                     </form>
-                    <button data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
+                    <button className='deleteButton' data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
                 </div>
             );
         }

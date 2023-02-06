@@ -1,10 +1,8 @@
-import React, {Component} from "react";
-import uniqid from "uniqid";
-import General from "./components/General";
-import Education from "./components/Education";
-import Employment from "./components/Employment";
-import { html2pdf } from "html2pdf.js";
-
+import React, {Component} from 'react';
+import uniqid from 'uniqid';
+import General from './components/General';
+import Education from './components/Education';
+import Employment from './components/Employment';
 
 class App extends Component {
   constructor() {
@@ -22,17 +20,12 @@ class App extends Component {
       jobs: [{company: '', position: '', duties: '', startDate: '', endDate: '', key: uniqid()}]
     };
   };
-  handleGeneratePdf = () => {
-    const CV = document.getElementById('cv');
-    html2pdf().from(CV).save();
-  };
 
   formatDate = (string) => {
     let months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
     // [year, month, day]
     let arr = string.split('-')
     let month = months[arr[1]];
-    console.log(month);
     // index = index[0] === '0' ? parseInt(index[1]) : parseInt(index[1]);
     return month + ' ' + arr[0]
   };
@@ -81,7 +74,6 @@ class App extends Component {
   };
 
   trackChanges = (e) => {
-    console.log('trackChanges hit')
     let {name, value} = e.target;
     if (e.target.getAttribute('data-id') === 'g') {
       let obj = this.state.person;
@@ -106,14 +98,10 @@ class App extends Component {
     let index = e.target.getAttribute('data');
     let arrName = e.target.getAttribute('data-id') === 's' ? 'schools' : 'jobs';
     let arr = this.state[arrName].slice();
-    console.log('arr: ', arr.forEach(a => console.log(a)))
     arr.splice(index, 1);
-    console.log('after: ', arr)
-    console.log('arrName: ', arrName)
     this.setState({
       [arrName]: arr
-    }, () => console.log('the new state: ', this.state));
-    // console.log('statests: ', this.state)
+    });
   };
 
 
@@ -125,6 +113,7 @@ class App extends Component {
         <h1>CV Generator</h1>
 
         <div className='topHeading'><h2>General</h2></div>
+        <hr className='topLine'></hr>
         <div className='formBox'>
           <General isEdit={this.state.isEdit} data={this.state.person} track={this.trackChanges}></General>
         </div>
@@ -133,12 +122,10 @@ class App extends Component {
           <h2>Education</h2>
           <button className='add' id='s' onClick={this.addField}> + </button>
         </div>
+        <hr className='topLine'></hr>
         <div className='formBox'>
           {
             this.state.schools.map((school, index) => {
-              console.log('Map schools: ', this.state.schools)
-              console.log('map index: ', index)
-              console.log('school.school: ', school.school)
               if (this.state.schools.length > 1){
                 return (
                   <Education hasDelete='true' delete={this.deleteItem} isEdit={this.state.isEdit} data={school} index={index} key={school.key}
@@ -157,6 +144,7 @@ class App extends Component {
           <h2>Employment</h2>
           <button className='add' id='j'  onClick={this.addField}> + </button>
         </div>
+        <hr className='topLine'></hr>
         <div className='formBox'>
           {
             this.state.jobs.map((job, index) => {
@@ -181,7 +169,7 @@ class App extends Component {
     // If done filling out form
     return(
       <div id='displayMain'>
-        <div id='cv'>
+        <div id='cvPdf'>
           <div className='topBox' key={this.state.id}>
             <h2>{this.state.person.firstName + ' ' + this.state.person.lastName}</h2>
             <div className='sameLine'>
@@ -195,7 +183,7 @@ class App extends Component {
               {this.state.schools.map((school, index)  => {
                 return (
                   <div className='item' key={school.key}>
-                    <p className='title'>{school.school}</p>
+                    <p className='displayTitle'>{school.school}</p>
                     <p className='plain'>{school.major + ' ' + school.degreeType}</p>
                     <p className='plain'>{'Graduated '+ this.formatDate(school.gradDate)}</p>
                   </div>
@@ -205,19 +193,23 @@ class App extends Component {
             <div className="jobBox">
               <h2>Employment</h2>
               {this.state.jobs.map((job, index) => {
-                if (job.duties === '') {
+                if (job.duties === '' || !job.duties) {
                   return ( 
                     <div className='item' key={job.key}>
-                      <p className='title'>{job.company}</p>
-                      <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      <div className='dateLine'>
+                        <p className='displayTitle'>{job.company}</p>
+                        <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      </div>
                       <p className='plain'>{'Position: ' + job.position}</p>
                     </div>
                   );
                 } else {
                   return (
                     <div className='item' key={job.key}>
-                      <p className='title'>{job.company}</p>
-                      <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      <div className='dateLine'>
+                        <p className='displayTitle'>{job.company}</p>
+                        <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
+                      </div>
                       <p className='plain'>{'Position: ' + job.position}</p>
                       <p className='plain'>{'Duties: ' + job.duties}</p>
                     </div>
@@ -228,7 +220,6 @@ class App extends Component {
           </div>
         </div>
         <button id='edit' onClick={this.handleDisplay}>Edit</button>
-        <button id='pdf' onClick={this.handleGeneratePdf}>Generate PDF</button>
       </div>
     );
   };
