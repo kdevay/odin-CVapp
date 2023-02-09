@@ -1,159 +1,52 @@
-import React, {Component} from "react";
+import React from "react";
 
-class Education extends Component {
-    constructor(props) {
-        super(props);
-        this.degreeTypes = [
-            'Select',
-            'Associate',
-            'Bachelor',
-            'Master',
-            'PHD',
-            'MD',
-            'JD',
-        ];
-    };
+export function Education(props) {
+    const {deleteItem, isEdit, data, index, track} = props;
+    const degreeTypes = [
+        'Select',
+        'Associate',
+        'Bachelor',
+        'Master',
+        'PHD',
+        'MD',
+        'JD',
+    ];
 
-    render() {
-        if (!this.props.isEdit){ // If filling out multiple school forms (not editing)
-            if (this.props.hasDelete === 'true'){ 
-                return(
-                    <div className='formDiv'>
-                        <form className='smallForm'>
-                            <hr className='small1'></hr>
-                            <div>
-                                <label htmlFor='school'>School</label><br></br>
-                                <input data-id='s' data={this.props.index} type='text' name='school' onChange={this.props.track}></input>
-                            </div>
-                            <div>
-                                <label htmlFor='major'>Major</label><br></br>
-                                <input data-id='s' data={this.props.index} type='text' name='major' onChange={this.props.track}></input>
-                            </div>
-                            <div>
-                                <label htmlFor='gradDate'>Graduated</label><br></br>
-                                <input data-id='s' data={this.props.index} name='gradDate' type='date' onChange={this.props.track}></input>
-                            </div>
-                            <div>
-                                <label htmlFor='degreeType'>Degree Type</label><br></br>
-                                <select data-id='s' data={this.props.index} name='degreeType' onChange={this.props.track}>
-                                    {
-                                        this.degreeTypes.map((item, index) => {
-                                                if (item === this.props.data.degreeType) {
-                                                    return <option selected key={index} value={item}>{item}</option>;
-                                                }
-                                                return <option key={index} value={item}>{item}</option>;
-                                        })
-                                    }
-                                </select>
-                            </div>
-                        </form>
-                        <button className='deleteButton' data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
-                    </div>
-                );
-            }// If filling out one school form
-            return (
-                <div className='formDiv'>
-                    <form className='smallForm'>
-                        <hr className='small1'></hr>
-                        <div>
-                            <label htmlFor='school'>School</label><br></br>
-                            <input data-id='s' data={this.props.index} type='text' name='school' onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='major'>Major</label><br></br>
-                            <input data-id='s' data={this.props.index} type='text' name='major' onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='gradDate'>Graduated</label><br></br>
-                            <input data-id='s' data={this.props.index} name='gradDate' type='date' onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='degreeType'>Degree Type</label><br></br>
-                            <select data-id='s' data={this.props.index} name='degreeType' onChange={this.props.track}>
-                                {
-                                    this.degreeTypes.map((item, index) => {
-                                            if (item === this.props.data.degreeType) {
-                                                return <option selected key={index} value={item}>{item}</option>;
-                                            }
-                                            return <option key={index} value={item}>{item}</option>;
-                                    })
-                                }
-                            </select>
-                        </div>
-                        <br></br>
-                    </form>
+    return(
+        <div className='formDiv'>
+            <form className='smallForm'>
+                <hr className='small1'></hr>
+                <div>
+                    <label htmlFor='school'>School</label><br></br>
+                    <input data-id='s' data={index} type='text' name='school' value={isEdit ? data.school : ''} onChange={track}></input>
                 </div>
-            );
-        }
-        if (this.props.hasDelete === 'true') { // If editing multiple school forms
-            return (
-                <div className='formDiv'>
-                    <form className='smallForm'>
-                        <hr className='small1'></hr>
-                        <div>
-                            <label htmlFor='school'>School</label><br></br>
-                            <input data-id='s' data={this.props.index} type='text' name='school' value={this.props.data.school} onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='major'>Major</label><br></br>
-                            <input data-id='s' data={this.props.index} type='text' name='major' value={this.props.data.major} onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='graduation'>Graduated</label><br></br>
-                            <input data-id='s' data={this.props.index} name='graduation' type='date' value={this.props.data.date} onChange={this.props.track}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='degreeType'>Degree Type</label><br></br>
-                            <select data-id='s' data={this.props.index} name='degreeType' onChange={this.props.track}>
-                                {
-                                    this.degreeTypes.map((item, index) => {
-                                        if (item === this.props.data.degreeType) {
-                                            return <option selected key={index} value={item}>{item}</option>;
-                                        }
-                                        return <option key={index} value={item}>{item}</option>;
-                                    })
-                                }
-                            </select>
-                        </div>
-                    </form>
-                    <button className='deleteButton' data-id='s' data={this.props.index} onClick={this.props.delete}>Delete</button>
+                <div>
+                    <label htmlFor='major'>Major</label><br></br>
+                    <input data-id='s' data={index} type='text' name='major' value={isEdit ? data.major : ''} onChange={track}></input>
                 </div>
-            );
-        }
-        return (
-            <div className='formDiv'>
-                <form className='smallForm'>
-                    <hr className='small1'></hr>
-                    <div>
-                        <label htmlFor='school'>School</label><br></br>
-                        <input data-id='s' data={this.props.index} type='text' name='school' value={this.props.data.school} onChange={this.props.track}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='major'>Major</label><br></br>
-                        <input data-id='s' data={this.props.index} type='text' name='major' value={this.props.data.major} onChange={this.props.track}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='graduation'>Graduated</label><br></br>
-                        <input data-id='s' data={this.props.index} name='graduation' type='date' value={this.props.data.date} onChange={this.props.track}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='degreeType'>Degree Type</label><br></br>
-                        <select data-id='s' data={this.props.index} name='degreeType' onChange={this.props.track}>
-                            {
-                                this.degreeTypes.map((item, index) => {
-                                    if (item === this.props.data.degreeType) {
-                                        return <option selected key={index} value={item}>{item}</option>;
-                                    }
-                                    return <option key={index} value={item}>{item}</option>;
-                                })
-                            }
-                        </select>
-                    </div>
-                    <br></br>
-                </form>
-            </div>
-        );
-    };
+                <div>
+                    <label htmlFor='gradDate'>Graduated</label><br></br>
+                    <input data-id='s' data={index} name='gradDate' type='date' value={isEdit ? data.date : ''} onChange={track}></input>
+                </div>
+                <div>
+                    <label htmlFor='degreeType'>Degree Type</label><br></br>
+                    <select data-id='s' data={index} name='degreeType' onChange={track}>
+                        {
+                            degreeTypes.map((item, index) => {
+                                if (isEdit && item === data.degreeType) {
+                                    return <option selected key={index} value={item}>{item}</option>;
+                                }
+                                return <option key={index} value={item}>{item}</option>;
+                            })
+                        }
+                    </select>
+                </div>
+            </form>
+            { deleteItem === null ? (
+                <button className='deleteButton' data-id='s' data={index} onClick={deleteItem}>Delete</button>
+            ) : (
+                null
+            )}
+        </div>
+    );
 };
-
-export default Education; 

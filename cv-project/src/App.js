@@ -1,228 +1,148 @@
-import React, {Component} from 'react';
 import uniqid from 'uniqid';
+import React, { useState } from 'react';
 import General from './components/General';
 import Education from './components/Education';
 import Employment from './components/Employment';
+import {TopFormHeader, FormHeader} from './components/Headers';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isEdit: false,
-      isDone: false,
-      person: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: ''
-      },
-      schools: [{school:'', major:'', degreeType:'', gradDate:'', key: uniqid()}],
-      jobs: [{company: '', position: '', duties: '', startDate: '', endDate: '', key: uniqid()}]
+function App () {
+    const [isEdit, setIsEdit] = useState(false);
+    const [isDone, setIsDone] = useState(false);
+    const [person, setPerson] = useState({firstName: '', lastName: '', email: '', phone: ''});
+    const [schools, setSchools] = useState([addNew('school')]);
+    const [jobs, setJobs] = useState([addNew('job')]);
+    const Months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
+
+    const formatDate = (string) => {
+        let arr = string.split('-') // arr = [year, month, day]
+        let month = Months[arr[1]];
+        return month + ' ' + arr[0]
     };
-  };
 
-  formatDate = (string) => {
-    let months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
-    // [year, month, day]
-    let arr = string.split('-')
-    let month = months[arr[1]];
-    // index = index[0] === '0' ? parseInt(index[1]) : parseInt(index[1]);
-    return month + ' ' + arr[0]
-  };
-
-  handleDisplay = (e) => {
-    if (e.target.id === 'edit') {
-      let bool = this.state.isEdit;
-      this.setState({
-        isEdit: !bool,
-        isDone: false
-      });
-      return;
-    }
-    let status = e.target.id === 'done' ? true : false;
-    this.setState({
-      isDone: status,
-      isEdit: false
-    });
-  };
-
-  addField = (e) => {
-    if (e.target.id === 's'){
-      let school = {
-        school:'',
-        major:'',
-        degreeType:'',
-        gradDate:'',
-        key: uniqid()
-      };
-      this.setState({
-        schools: this.state.schools.concat(school)
-      });
-      return;
-    }
-    let job = {
-      company: '',
-      position: '',
-      duties: '',
-      startDate: '',
-      endDate: '',
-      key: uniqid()
+    const handleDisplay = (e) => {
+        if (e.target.id === 'edit') {
+            setIsDone(false);
+            setIsEdit(true);
+            return;
+        }
+        setIsDone(e.target.id === 'done' ? true : false);
+        setIsEdit(false);
     };
-    this.setState({
-      jobs: this.state.jobs.concat(job)
-    });
-  };
 
-  trackChanges = (e) => {
-    let {name, value} = e.target;
-    if (e.target.getAttribute('data-id') === 'g') {
-      let obj = this.state.person;
-      obj[name] = value;
-      this.setState({
-        person: obj
-      });
-      return;
-    }
-    let index = e.target.getAttribute('data');
-    let arrName = e.target.getAttribute('data-id') === 's' ? 'schools' : 'jobs';
-    let arr = this.state[arrName].slice();
-    let obj = arr[index];
-    obj[name] = value;
-    arr[index] = obj;
-    this.setState({
-      [arrName]: arr
-    });
-  };
+    const addField = (e) => {
+        if (e.target.id === 's'){
+            setSchools(schools.concat(addNew('school')));
+            return;
+        }
+        setJobs(jobs.concat(addNew('job')));
+    };
 
-  deleteItem = (e) => {
-    let index = e.target.getAttribute('data');
-    let arrName = e.target.getAttribute('data-id') === 's' ? 'schools' : 'jobs';
-    let arr = this.state[arrName].slice();
-    arr.splice(index, 1);
-    this.setState({
-      [arrName]: arr
-    });
-  };
+    const trackChanges = (e) => {
+        let {name, value} = e.target;
+        if (e.target.getAttribute('data-id') === 'g') {
+            setPerson( () => {
+                if (person[name] !== value) {
+                    person[name] = value;
+                }
+            });
+            return;
+        } 
+        let index = e.target.getAttribute('data');
+        if (e.target.getAttribute('data-id') === 'j') {
+            setJobs( () => {
+                if (jobs[index][name] !== value){
+                    jobs[index][name] = value;
+                }
+            });
+        } else {
+            setSchools( () => {
+                if (schools[index][name] !== value){
+                    schools[index][name] = value;
+                }
+            });
+        }
+    };
 
+    const deleteItem = (e) => {
+        let index = e.target.getAttribute('data');
+        e.target.getAttribute('data-id') === 'j' ? setJobs(jobs.splice(index, 1)) : setSchools(schools.splice(index, 1));
+    };
 
-  render() {
-      // If editing or filling for for the first time
-    if (!this.state.isDone) {
-      return(
-      <div id='main'>
-        <h1>CV Generator</h1>
-
-        <div className='topHeading'><h2>General</h2></div>
-        <hr className='topLine'></hr>
-        <div className='formBox'>
-          <General isEdit={this.state.isEdit} data={this.state.person} track={this.trackChanges}></General>
-        </div>
-
-        <div className='heading'>
-          <h2>Education</h2>
-          <button className='add' id='s' onClick={this.addField}> + </button>
-        </div>
-        <hr className='topLine'></hr>
-        <div className='formBox'>
-          {
-            this.state.schools.map((school, index) => {
-              if (this.state.schools.length > 1){
-                return (
-                  <Education hasDelete='true' delete={this.deleteItem} isEdit={this.state.isEdit} data={school} index={index} key={school.key}
-                  track={this.trackChanges}></Education>
-                );
-              }
-              return (
-                <Education hasDelete='false' isEdit={this.state.isEdit} data={school} index={index} key={school.key}
-                track={this.trackChanges}></Education>
-              );
-            })
-          }
-        </div>
-
-        <div className='heading'>
-          <h2>Employment</h2>
-          <button className='add' id='j'  onClick={this.addField}> + </button>
-        </div>
-        <hr className='topLine'></hr>
-        <div className='formBox'>
-          {
-            this.state.jobs.map((job, index) => {
-              if (this.state.jobs.length > 1){
-                return (
-                  <Employment hasDelete='true' delete={this.deleteItem} isEdit={this.state.isEdit} data={job} index={index} key={job.key} 
-                  track={this.trackChanges}></Employment>
-                  );
-              }
-              return (
-                <Employment hasDelete='false' isEdit={this.state.isEdit} data={job} index={index} key={job.key} 
-                track={this.trackChanges}></Employment>
-                );
-            })
-          }
-        </div>
-
-        <button id='done' onClick={this.handleDisplay}>Done</button>
-      </div>
-      );
-    }
-    // If done filling out form
+    if (!isDone) { // If editing/filling form
     return(
-      <div id='displayMain'>
-        <div id='cvPdf'>
-          <div className='topBox' key={this.state.id}>
-            <h2>{this.state.person.firstName + ' ' + this.state.person.lastName}</h2>
-            <div className='sameLine'>
-              <p className='plain'>{this.state.person.email}</p>
-              <p className='plain'>{this.state.person.phone}</p>
+        <div id='main'>
+            <TopFormHeader></TopFormHeader>
+            <General isEdit={isEdit} isDone={null} data={person} track={trackChanges}></General>
+            <FormHeader addField={addField} name={'Education'}></FormHeader>
+            <div className='formBox'>
+                {
+                    schools.map((school, index) => {
+                        return (
+                            <Education data={school} index={index} key={school.key} track={trackChanges} isEdit={isEdit}
+                            deleteItem={schools.length > 1 ? deleteItem : null}></Education>
+                        );
+                    })
+                }
             </div>
-          </div>
-          <div className='mainGrid'>
+            <FormHeader addField={addField} name={'Employment'}></FormHeader>
+            <div className='formBox'>
+                {
+                    jobs.map((job, index) => {
+                        return (
+                            <Employment data={job} index={index} key={job.key} track={trackChanges} isEdit={isEdit}
+                            deleteItem={jobs.length > 1 ? deleteItem : null}></Employment>
+                        );
+                    })
+                }
+            </div>
+            <button id='done' onClick={handleDisplay}>Done</button>
+        </div>
+    );
+    }
+
+    return( // If done filling out form
+    <div id='displayMain'>
+        <General isDone={isDone} data={person} isEdit={isEdit} track={null}></General>
+        <div className='mainGrid'>
             <div className="SchoolBox">
-              <h2>Education</h2>
-              {this.state.schools.map((school, index)  => {
-                return (
-                  <div className='item' key={school.key}>
-                    <p className='displayTitle'>{school.school}</p>
-                    <p className='plain'>{school.major + ' ' + school.degreeType}</p>
-                    <p className='plain'>{'Graduated '+ this.formatDate(school.gradDate)}</p>
-                  </div>
-                );
-              })}
+                <h2>Education</h2>
+                {schools.map((school)  => {
+                    return (
+                    <div className='item' key={school.key}>
+                        <p className='displayTitle'>{school.school}</p>
+                        <p className='plain'>{school.major + ' ' + school.degreeType}</p>
+                        <p className='plain'>{'Graduated '+ formatDate(school.gradDate)}</p>
+                    </div>
+                    );
+                })}
             </div>
             <div className="jobBox">
-              <h2>Employment</h2>
-              {this.state.jobs.map((job, index) => {
-                if (job.duties === '' || !job.duties) {
-                  return ( 
-                    <div className='item' key={job.key}>
-                      <div className='dateLine'>
-                        <p className='displayTitle'>{job.company}</p>
-                        <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
-                      </div>
-                      <p className='plain'>{'Position: ' + job.position}</p>
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div className='item' key={job.key}>
-                      <div className='dateLine'>
-                        <p className='displayTitle'>{job.company}</p>
-                        <p className='date'>{this.formatDate(job.startDate) + ' - ' + this.formatDate(job.endDate)}</p>
-                      </div>
-                      <p className='plain'>{'Position: ' + job.position}</p>
-                      <p className='plain'>{'Duties: ' + job.duties}</p>
-                    </div>
-                  );
+                <h2>Employment</h2>
+                {
+                    jobs.map((job) => {
+                        return (
+                            <div className='item' key={job.key}>
+                            <div className='dateLine'>
+                                <p className='displayTitle'>{job.company}</p>
+                                <p className='date'>{formatDate(job.startDate) + ' - ' + formatDate(job.endDate)}</p>
+                            </div>
+                            <p className='plain'>{'Position: ' + job.position}</p>
+                            <p className='plain'>{'Duties: ' + job.duties}</p>
+                            </div>
+                        );
+                    })
                 }
-              })}
             </div>
-          </div>
         </div>
-        <button id='edit' onClick={this.handleDisplay}>Edit</button>
-      </div>
+        <button id='edit' onClick={handleDisplay}>Edit</button>
+    </div>
     );
-  };
-};
+}
+
+function addNew(type) {
+    let job = {company: '', position: '', duties: '', startDate: '', endDate: '', key: uniqid()};
+    let school =  {school:'', major:'', degreeType:'', gradDate:'', key: uniqid()};
+    return type === 'job' ? job : school;
+}
 
 export default App; 

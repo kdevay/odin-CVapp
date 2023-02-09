@@ -1,60 +1,40 @@
-import React, {Component} from "react";
+import React from "react";
 
-class General extends Component {
-    constructor(props) {
-        super(props);
-    };
-
-
-    render() {
-        if (!this.props.isEdit){
-            return(
-                <form className='smallForm'>
-                    <hr className='small1'></hr>
-                    <div>
-                        <label htmlFor='firstName' className='plain'>First Name</label><br></br>
-                        <input data-id='g' type='text' name='firstName' onChange={this.props.track}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='lastName' className='plain'>Last Name</label><br></br>
-                        <input data-id='g' type='text' name='lastName' onChange={this.props.track}></input>
-                    </div>
-
-                    <div>
-                        <label id='email' htmlFor='email' className='plain'>Email</label><br></br>
-                        <input data-id='g' type='text' name='email' onChange={this.props.track}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='phone' className='plain'>Phone</label><br></br>
-                        <input data-id='g' type='text' name='phone' onChange={this.props.track}></input>
-                    </div>
-                    <br></br>
-                </form>
-            );
-        }
-        return(
+export function General (props) {
+    const {isEdit, data, track} = props;
+    if (isDone) {
+        return (        
+            <div className='topBox'>
+                <h2>{data.firstName + ' ' + data.lastName}</h2>
+                <div className='sameLine'>
+                    <p className='plain'>{data.email}</p>
+                    <p className='plain'>{data.phone}</p>
+                </div>
+            </div>
+        );
+    }
+    return (
+        <div className='formBox'>
             <form className='smallForm'>
                 <hr className='small1'></hr>
                 <div>
                     <label htmlFor='firstName' className='plain'>First Name</label><br></br>
-                    <input data-id='g' type='text' name='firstName' value={this.props.data.firstName} onChange={this.props.track}></input>
+                    <input data-id='g' type='text' name='firstName' value={isEdit ? data.firstName : ''} onChange={track}></input>
                 </div>
                 <div>
                     <label htmlFor='lastName' className='plain'>Last Name</label><br></br>
-                    <input data-id='g' type='text' name='lastName' value={this.props.data.lastName} onChange={this.props.track}></input>
+                    <input data-id='g' type='text' name='lastName' value={isEdit ? data.lastName : ''} onChange={track}></input>
                 </div>
                 <div>
                     <label htmlFor='email' className='plain'>Email</label><br></br>
-                    <input data-id='g' type='text' name='email' value={this.props.data.email} onChange={this.props.track}></input>
+                    <input data-id='g' type='text' name='email' value={isEdit ? data.email : ''} onChange={track}></input>
                 </div>
                 <div>
                     <label htmlFor='phone' className='plain'>Phone Number</label><br></br>
-                    <input data-id='g' type='text' name='phone' value={this.props.data.phone} onChange={this.props.track}></input>
+                    <input data-id='g' type='text' name='phone' value={isEdit ? data.phone : ''} onChange={track}></input>
                 </div>
                 <br></br>
             </form>
-        );
-    };
+        </div>
+    );
 };
-
-export default General; 
