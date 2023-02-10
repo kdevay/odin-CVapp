@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 
-export function Employment(props) {
-    const {deleteItem, isEdit, data, index, track} = props;
+export default function Employment(props) {
+    const {deleteItem, data, index, track} = props;
+    const [obj, setObj] = useState(data);
+
+    useEffect(() => {
+        track(obj, 'j', index);// Update parent whenever child changes
+    }, [obj]);
+
+    const handleChange = e => {
+        const {name, value} = e.target;
+        if (obj[name] !== value) { // Update child whenever input changes
+            setObj({...obj, [name]: value});
+        }
+    };
 
     return(
         <div className='formDiv'>
@@ -9,23 +21,23 @@ export function Employment(props) {
                 <hr className='jobLine'></hr>
                 <div>
                     <label htmlFor='company' className='plain'>Company</label><br></br>
-                    <input data-id='j' data={index} type='text' name='company' value={isEdit ? data.company : ''} onChange={track}></input>
+                    <input onChange={handleChange} data-id='j' data={index} type='text' name='company' value={obj.company}></input>
                 </div>
                 <div>
                     <label htmlFor='position' className='plain'>Position</label><br></br>
-                    <input data-id='j' data={index} type='text' name='position' value={isEdit ? data.position : ''} onChange={track}></input>
+                    <input onChange={handleChange} data-id='j' data={index} type='text' name='position' value={obj.position}></input>
                 </div>
                 <div className='bigInput'>
                     <label htmlFor='duties' className='plain'>Duties</label><br></br>
-                    <input data-id='j' data={index} type='text' name='duties' className='bigBox' maxLength='400' onClick={track} value={isEdit ? data.duties : ''} onChange={track}></input>
+                    <textarea onChange={handleChange} data-id='j' data={index} type='text' name='duties' className='bigBox' maxLength='400' value={obj.duties}></textarea>
                 </div>
                 <div>
                     <label htmlFor='startDate' className='plain'>Start Date</label><br></br>
-                    <input data-id='j' data={index} name='startDate' type='date' value={isEdit ? startDate.duties : ''} onChange={track}></input>
+                    <input onChange={handleChange} data-id='j' data={index} name='startDate' type='date' value={obj.startDate}></input>
                 </div>
                 <div>
                     <label htmlFor='endDate' className='plain'>End Date</label><br></br>
-                    <input data-id='j' data={index} name='endDate' type='date' value={isEdit ? data.endDate : ''} onChange={track}></input>
+                    <input onChange={handleChange} data-id='j' data={index} name='endDate' type='date' value={obj.endDate}></input>
                 </div>
             </form>
             { deleteItem === null ? (

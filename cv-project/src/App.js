@@ -5,74 +5,65 @@ import Education from './components/Education';
 import Employment from './components/Employment';
 import {TopFormHeader, FormHeader} from './components/Headers';
 
-function App () {
+export default function App () {
     const [isEdit, setIsEdit] = useState(false);
     const [isDone, setIsDone] = useState(false);
     const [person, setPerson] = useState({firstName: '', lastName: '', email: '', phone: ''});
     const [schools, setSchools] = useState([addNew('school')]);
     const [jobs, setJobs] = useState([addNew('job')]);
-    const Months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
-
-    const formatDate = (string) => {
-        let arr = string.split('-') // arr = [year, month, day]
-        let month = Months[arr[1]];
-        return month + ' ' + arr[0]
-    };
 
     const handleDisplay = (e) => {
+        e.preventDefault();
         if (e.target.id === 'edit') {
             setIsDone(false);
             setIsEdit(true);
-            return;
+        } else {
+            setIsDone(e.target.id === 'done' ? true : false);
+            setIsEdit(false);
         }
-        setIsDone(e.target.id === 'done' ? true : false);
-        setIsEdit(false);
+        return;
     };
 
     const addField = (e) => {
-        if (e.target.id === 's'){
-            setSchools(schools.concat(addNew('school')));
-            return;
-        }
-        setJobs(jobs.concat(addNew('job')));
+        e.preventDefault();
+        e.target.id === 's' ? 
+        setSchools(() => schools.concat(addNew('school'))) 
+        :
+        setJobs(() => jobs.concat(addNew('job')));
     };
 
-    const trackChanges = (e) => {
-        let {name, value} = e.target;
-        if (e.target.getAttribute('data-id') === 'g') {
-            setPerson( () => {
-                if (person[name] !== value) {
-                    person[name] = value;
-                }
-            });
-            return;
-        } 
-        let index = e.target.getAttribute('data');
-        if (e.target.getAttribute('data-id') === 'j') {
+    const trackChanges = (obj, type, index) => {
+        if (type === 'g') {
+            setPerson(() => person !== obj ? obj : person);
+        } else if (type === 'j') {
             setJobs( () => {
-                if (jobs[index][name] !== value){
-                    jobs[index][name] = value;
+                if (jobs[index] !== obj) {
+                    jobs[index] = obj;
                 }
+                return jobs;
             });
         } else {
             setSchools( () => {
-                if (schools[index][name] !== value){
-                    schools[index][name] = value;
+                if (schools[index] !== obj){
+                    schools[index] = obj;
                 }
+                return schools;
             });
         }
     };
 
     const deleteItem = (e) => {
+        e.preventDefault();
         let index = e.target.getAttribute('data');
         e.target.getAttribute('data-id') === 'j' ? setJobs(jobs.splice(index, 1)) : setSchools(schools.splice(index, 1));
+        return;
     };
 
     if (!isDone) { // If editing/filling form
     return(
         <div id='main'>
             <TopFormHeader></TopFormHeader>
-            <General isEdit={isEdit} isDone={null} data={person} track={trackChanges}></General>
+            <General isDone={isDone} data={person} track={trackChanges}></General>
             <FormHeader addField={addField} name={'Education'}></FormHeader>
             <div className='formBox'>
                 {
@@ -89,7 +80,7 @@ function App () {
                 {
                     jobs.map((job, index) => {
                         return (
-                            <Employment data={job} index={index} key={job.key} track={trackChanges} isEdit={isEdit}
+                            <Employment data={job} index={index} key={job.key} track={trackChanges}
                             deleteItem={jobs.length > 1 ? deleteItem : null}></Employment>
                         );
                     })
@@ -139,10 +130,15 @@ function App () {
     );
 }
 
+function formatDate(string) {
+    const Months = {'01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'April', '05': 'May', '06': 'Jun', '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'};
+    let arr = string.split('-') // arr = [year, month, day]
+    let month = Months[arr[1]];
+    return month + ' ' + arr[0]
+};
+
 function addNew(type) {
     let job = {company: '', position: '', duties: '', startDate: '', endDate: '', key: uniqid()};
     let school =  {school:'', major:'', degreeType:'', gradDate:'', key: uniqid()};
     return type === 'job' ? job : school;
 }
-
-export default App; 
